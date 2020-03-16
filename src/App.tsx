@@ -1,25 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import "antd/dist/antd.css";
+import styled from "styled-components";
+import { AppRouter } from "./routes/AppRouter";
+
+const Body = styled.div`
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+`;
+
+// const iexRequest = (endpoint: string) => {
+//   const baseUrl = "https://cloud.iexapis.com/stable";
+//   const token = process.env.REACT_APP_IEX_TOKEN;
+//   return `${baseUrl}/${endpoint}?token=${token}`;
+// };
 
 function App() {
+  // useEffect(() => {
+  //   fetch(iexRequest("stock/AAPL/quote"))
+  //     .then(response => {
+  //       if (response.ok) return response.json();
+  //     })
+  //     .then(data => console.log(data));
+  // }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Body>
+      <AppRouter />
+    </Body>
   );
 }
 
