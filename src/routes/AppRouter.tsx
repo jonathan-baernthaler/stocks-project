@@ -1,8 +1,9 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Dashboard } from "../components/portfolio/Dashboard";
-import { Stocks } from "../components/stocks/Stocks";
 import { Sidebar } from "../components/sidebar/SideBar";
+import { Dashboard } from "../components/portfolio/Dashboard";
+import { StockSearch } from "../components/stocks/StockSearch";
+import { StockDetails } from "../components/stocks/StockDetails";
 import styled from "styled-components";
 
 const MainLayout = styled.div`
@@ -19,7 +20,8 @@ export const AppRouter = () => {
       <MainLayout>
         <Switch>
           <Route path="/" component={Dashboard} exact />
-          <Route path="/stocks" component={Stocks} />
+          <Route path="/stocks" component={StockSearch} exact />
+          <Route path="/stocks/:ticker" component={StockDetails}></Route>
         </Switch>
       </MainLayout>
     </BrowserRouter>
