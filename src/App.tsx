@@ -1,7 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "antd/dist/antd.css";
 import styled from "styled-components";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
 import { AppRouter } from "./routes/AppRouter";
+import { portfolioReducer } from "./state/reducers/portfolio";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 const Body = styled.div`
   display: flex;
@@ -9,25 +13,15 @@ const Body = styled.div`
   height: 100vh;
 `;
 
-// const iexRequest = (endpoint: string) => {
-//   const baseUrl = "https://cloud.iexapis.com/stable";
-//   const token = process.env.REACT_APP_IEX_TOKEN;
-//   return `${baseUrl}/${endpoint}?token=${token}`;
-// };
+export const store = createStore(portfolioReducer, composeWithDevTools());
 
 function App() {
-  // useEffect(() => {
-  //   fetch(iexRequest("stock/AAPL/quote"))
-  //     .then(response => {
-  //       if (response.ok) return response.json();
-  //     })
-  //     .then(data => console.log(data));
-  // }, []);
-
   return (
-    <Body>
-      <AppRouter />
-    </Body>
+    <Provider store={store}>
+      <Body>
+        <AppRouter />
+      </Body>
+    </Provider>
   );
 }
 

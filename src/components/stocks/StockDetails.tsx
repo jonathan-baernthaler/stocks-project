@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { StockProfile } from "./StockProfile";
 import styled from "styled-components";
 import { StockSearch } from "./StockSearch";
 import { StockChart } from "./StockChart";
 import { StockRatios } from "./StockRatios";
+import { BuyStock } from "./BuyStock";
 import { Spinner } from "../base-ui/Spinner";
+import { useDispatch } from "react-redux";
+import { buyStock, sellStock } from "../../state/actions/portfolio";
+import { SellStock } from "./SellStock";
+import { useStockInPortfolio } from "../../state/selectors/portfolio";
 
 const Body = styled.div`
   display: flex;
@@ -18,6 +23,12 @@ const Header = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-bottom: 70px;
+  width: 100%;
+`;
+
+const ContentFooter = styled.div`
+  display: flex;
+  justify-content: flex-end;
   width: 100%;
 `;
 
@@ -37,6 +48,9 @@ export const StockDetails = () => {
   const [stockDetails, setStockDetails] = useState<any>();
   const [chartPeriod, setChartPeriod] = useState<number>(5);
   const { ticker } = useParams();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const stockInPortfolio = useStockInPortfolio(ticker);
 
   useEffect(() => {
     const baseUrl = "https://fmpcloud.io/api/v3";
@@ -67,6 +81,28 @@ export const StockDetails = () => {
     return <Spinner />;
   }
 
+  const onBuy = (amount: number) => {
+    dispatch(
+      buyStock({
+        symbol: ticker!,
+        price: companyProfile.price,
+        qtty: amount
+      })
+    );
+    history.push("/");
+  };
+
+  const onSell = (amount: number) => {
+    dispatch(
+      sellStock({
+        symbol: ticker!,
+        price: companyProfile.price,
+        qtty: amount
+      })
+    );
+    history.push("/");
+  };
+
   const { companyProfile, realTimeQuote, chartData } = stockDetails;
 
   return (
@@ -84,6 +120,12 @@ export const StockDetails = () => {
           />
           <StockRatios realTimeQuote={realTimeQuote} />
         </Content>
+        <ContentFooter>
+          {stockInPortfolio && (
+            <SellStock onClick={onSell} holdStock={stockInPortfolio?.qtty} />
+          )}
+          <BuyStock onClick={onBuy} price={companyProfile.price} />
+        </ContentFooter>
       </>
     </Body>
   );
