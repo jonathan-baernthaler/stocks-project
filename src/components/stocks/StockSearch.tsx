@@ -5,7 +5,7 @@ import { OptionsType } from "rc-select/lib/interface";
 import { useHistory } from "react-router-dom";
 
 const StyledSearch = styled(AutoComplete)`
-  width: 600px;
+  width: ${props => `${props.size ?? 600}px`};
 `;
 
 const getOptions = (
@@ -16,7 +16,11 @@ const getOptions = (
     label: `${entry.symbol} - ${entry.name}`
   }));
 
-export const StockSearch = () => {
+type Props = {
+  size: number;
+};
+
+export const StockSearch: React.FC<Props> = ({ size }) => {
   const [ticker, setTicker] = useState<string>("");
   const [options, setOptions] = useState<OptionsType>([]);
   const history = useHistory();
@@ -39,6 +43,8 @@ export const StockSearch = () => {
       options={options}
       onChange={(ticker: string) => setTicker(ticker)}
       onSelect={ticker => history.push(`/stocks/${ticker}`)}
+      //@ts-ignore
+      size={size}
     >
       <Input.Search placeholder="enter a ticker symbol to get the current stock quotes"></Input.Search>
     </StyledSearch>
