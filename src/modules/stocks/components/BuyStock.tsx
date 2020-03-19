@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { InputNumber, Button } from "antd";
-import { useCurrentBalance } from "../../state/selectors/portfolio";
+import { useCurrentBalance } from "../../../state/selectors/portfolio";
 import { useDispatch } from "react-redux";
-import { buyStock } from "../../state/actions/portfolio";
+import { buyStock } from "../../../state/actions/portfolio";
 import { useHistory } from "react-router-dom";
 
-const StyledInput = styled(InputNumber)``;
+const StyledInput = styled(InputNumber)`
+  margin-right: 20px;
+`;
 
 type Props = {
   symbol: string;
@@ -27,7 +29,7 @@ export const BuyStock: React.FC<Props> = ({ price, symbol }) => {
   };
 
   return (
-    <div style={{ marginRight: 100 }}>
+    <>
       <StyledInput
         min={0}
         max={Math.floor(currentBalance / price)}
@@ -37,6 +39,6 @@ export const BuyStock: React.FC<Props> = ({ price, symbol }) => {
       <Button type="primary" onClick={onClick}>
         Buy
       </Button>
-    </div>
+    </>
   );
 };

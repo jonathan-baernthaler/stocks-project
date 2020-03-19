@@ -9,12 +9,18 @@ import {
   useCurrentBalance,
   usePortfolio
 } from "../../state/selectors/portfolio";
-import { SearchBar } from "../stocks/SearchBar";
+import { SearchBar } from "../stocks/components/SearchBar";
 
 const Body = styled.div`
-  width: 80%;
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 const Stats = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: flex-start;
   margin-bottom: 50px;
 `;
 const Search = styled.div`
@@ -119,7 +125,12 @@ export const Dashboard = () => {
     {
       title: "Change",
       dataIndex: "change",
-      key: "change"
+      key: "change",
+      render: (str: string) => {
+        const num = (str.slice(1, -2) as unknown) as number;
+        const color = num > 0 ? "green" : "red";
+        return <span style={{ color }}>{`${num}%`}</span>;
+      }
     }
   ];
 
@@ -144,7 +155,7 @@ export const Dashboard = () => {
           </Col>
         </Row>
       </Stats>
-      <Table dataSource={data} columns={columns} />;
+      <Table dataSource={data} columns={columns} style={{ width: "100%" }} />;
     </Body>
   );
 };

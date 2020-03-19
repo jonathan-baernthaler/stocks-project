@@ -3,20 +3,13 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useShares } from "../../state/selectors/portfolio";
 import { Spinner } from "../core/Spinner";
-import { BuyStock } from "./BuyStock";
-import { SearchBar } from "./SearchBar";
-import { SellStock } from "./SellStock";
-import { StockChart } from "./StockChart";
-import { StockProfile } from "./StockProfile";
-import { StockRatios } from "./StockRatios";
+import { BuyStock } from "./components/BuyStock";
+import { SearchBar } from "./components/SearchBar";
+import { SellStock } from "./components/SellStock";
+import { Chart } from "./components/Chart";
+import { Profile } from "./components/Profile";
+import { Financials } from "./components/Financials";
 
-const Body = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  height: 100%;
-`;
 const Header = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -24,7 +17,13 @@ const Header = styled.div`
   width: 100%;
 `;
 
-const ContentFooter = styled.div`
+const Content = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+`;
+
+const Footer = styled.div`
   display: flex;
   justify-content: flex-end;
   width: 100%;
@@ -32,13 +31,6 @@ const ContentFooter = styled.div`
 
 const Search = styled(SearchBar)`
   margin-bottom: 50px;
-`;
-
-const ContentHeader = StockProfile;
-
-const Content = styled.div`
-  display: flex;
-  align-items: center;
 `;
 
 export const StockDetails = () => {
@@ -82,27 +74,25 @@ export const StockDetails = () => {
   const { companyProfile, realTimeQuote, chartData } = stockData;
 
   return (
-    <Body>
+    <>
       <Header>
         <Search size={300} />
       </Header>
-      <>
-        <ContentHeader companyProfile={companyProfile} />
-        <Content>
-          <StockChart
-            chartData={chartData}
-            chartPeriod={chartPeriod}
-            setChartPeriod={setChartPeriod}
-          />
-          <StockRatios realTimeQuote={realTimeQuote} />
-        </Content>
-        <ContentFooter>
-          {sharesHeld && (
-            <SellStock sharesHeld={sharesHeld} price={companyProfile.price} />
-          )}
-          <BuyStock price={companyProfile.price} symbol={ticker!} />
-        </ContentFooter>
-      </>
-    </Body>
+      <Content>
+        <Profile companyProfile={companyProfile} />
+        <Chart
+          chartData={chartData}
+          chartPeriod={chartPeriod}
+          setChartPeriod={setChartPeriod}
+        />
+        <Financials realTimeQuote={realTimeQuote} />
+      </Content>
+      <Footer>
+        {sharesHeld && (
+          <SellStock sharesHeld={sharesHeld} price={companyProfile.price} />
+        )}
+        <BuyStock price={companyProfile.price} symbol={ticker!} />
+      </Footer>
+    </>
   );
 };

@@ -3,14 +3,23 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import { sellStock } from "../../state/actions/portfolio";
-import { Stock } from "../../state/reducers/portfolio";
+import { sellStock } from "../../../state/actions/portfolio";
+import { Stock } from "../../../state/reducers/portfolio";
 
 const Body = styled.div`
   display: flex;
+  align-items: center;
+  margin-right: 50px;
 `;
 
-const StyledInput = styled(InputNumber)``;
+const StyledInput = styled(InputNumber)`
+  margin-right: 10px;
+`;
+
+const StyledText = styled(Typography.Text)`
+  font-weight: bold;
+  margin-right: 10px;
+`;
 
 type Props = {
   sharesHeld: Stock;
@@ -43,7 +52,7 @@ export const SellStock: React.FC<Props> = ({ sharesHeld, price }) => {
         defaultValue={qtty}
         onChange={onChange}
       />
-      <Typography.Text>{`of ${sharesHeld.qtty}`}</Typography.Text>
+      <StyledText>{`of ${sharesHeld.qtty}`}</StyledText>
       <Button type="primary" onClick={onClick}>
         Sell
       </Button>

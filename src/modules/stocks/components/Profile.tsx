@@ -1,17 +1,20 @@
 import React from "react";
-import { Avatar, Typography } from "antd";
-import { FileImageOutlined } from "@ant-design/icons";
+import { Typography } from "antd";
 import styled from "styled-components";
 const { Title, Paragraph } = Typography;
 
 const Body = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 80px;
+  margin-left: 40px;
+  margin-bottom: 20px;
 `;
 
-const Logo = styled(Avatar)`
+const Logo = styled.img`
+  width: 64px;
+  height: 64px;
   margin-right: 50px;
+  object-fit: contain;
 `;
 
 const Info = styled.div`
@@ -35,7 +38,7 @@ const Description = styled(Paragraph)`
   font-size: 12px;
 `;
 
-type StockProfileProps = {
+type ProfileProps = {
   companyProfile: {
     companyName: string;
     description: string;
@@ -45,9 +48,7 @@ type StockProfileProps = {
   };
 };
 
-export const StockProfile: React.FC<StockProfileProps> = ({
-  companyProfile
-}) => {
+export const Profile: React.FC<ProfileProps> = ({ companyProfile }) => {
   const {
     companyName,
     price,
@@ -58,7 +59,7 @@ export const StockProfile: React.FC<StockProfileProps> = ({
 
   return (
     <Body>
-      <Logo shape="square" size={64} src={image} icon={<FileImageOutlined />} />
+      <Logo src={image}></Logo>
       <Info>
         <Title style={{ marginBottom: 5, fontSize: 24 }}>
           <Name>{companyName}</Name>

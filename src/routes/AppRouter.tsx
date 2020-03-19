@@ -1,18 +1,18 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Sidebar } from "../components/sidebar/SideBar";
-import { Dashboard } from "../components/portfolio/Dashboard";
-import { StockDetails } from "../components/stocks/StockDetails";
+import { Sidebar } from "../modules/sidebar/SideBar";
+import { Dashboard } from "../modules/portfolio/Dashboard";
+import { StockDetails } from "../modules/stocks/StockDetails";
 import styled from "styled-components";
 import { NotFound } from "./NotFound";
-import { StockSearch } from "../components/stocks/StockSearch";
+import { StockSearch } from "../modules/stocks/StockSearch";
 
 const MainLayout = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  width: 100%;
+  width: 80%;
   padding: 36px;
 `;
 

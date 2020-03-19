@@ -1,6 +1,12 @@
 import React from "react";
 import { Table } from "antd";
 import numeral from "numeral";
+import styled from "styled-components";
+
+const Body = styled.div`
+  flex: 1;
+  padding-bottom: 40px;
+`;
 
 type Props = {
   realTimeQuote: {
@@ -14,7 +20,7 @@ type Props = {
   };
 };
 
-export const StockRatios: React.FC<Props> = ({ realTimeQuote }) => {
+export const Financials: React.FC<Props> = ({ realTimeQuote }) => {
   const data = [
     {
       key: "1",
@@ -64,12 +70,14 @@ export const StockRatios: React.FC<Props> = ({ realTimeQuote }) => {
     }
   ];
   return (
-    <Table
-      size="small"
-      columns={columns}
-      dataSource={data}
-      pagination={false}
-      showHeader={false}
-    />
+    <Body>
+      <Table
+        size="small"
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        showHeader={false}
+      />
+    </Body>
   );
 };

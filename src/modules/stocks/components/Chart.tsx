@@ -5,14 +5,11 @@ import moment from "moment";
 import { Radio } from "antd";
 
 const Body = styled.div`
-  margin-left: 60px;
-  margin-top: 50px;
-  margin-right: 60px;
-`;
-
-const Header = styled.div`
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 60px;
+  flex: 1;
 `;
 
 type Props = {
@@ -24,24 +21,22 @@ type Props = {
   setChartPeriod: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export const StockChart: React.FC<Props> = ({
+export const Chart: React.FC<Props> = ({
   chartData,
   chartPeriod,
   setChartPeriod
 }) => {
   return (
     <Body>
-      <Header>
-        <Radio.Group
-          value={chartPeriod}
-          onChange={e => setChartPeriod(e.target.value)}
-        >
-          <Radio.Button value="5">5</Radio.Button>
-          <Radio.Button value="15">15</Radio.Button>
-          <Radio.Button value="30">30</Radio.Button>
-        </Radio.Group>
-      </Header>
-      <LineChart width={500} height={250} data={chartData}>
+      <Radio.Group
+        value={chartPeriod}
+        onChange={e => setChartPeriod(e.target.value)}
+      >
+        <Radio.Button value="5">5</Radio.Button>
+        <Radio.Button value="15">15</Radio.Button>
+        <Radio.Button value="30">30</Radio.Button>
+      </Radio.Group>
+      <LineChart width={500} height={250} data={chartData} margin={{ top: 10 }}>
         <XAxis
           dataKey="date"
           tickFormatter={date => moment(date).format("DD.MM")}
