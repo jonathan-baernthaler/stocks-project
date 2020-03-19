@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { StockProfile } from "./StockProfile";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { StockSearch } from "./StockSearch";
-import { StockChart } from "./StockChart";
-import { StockRatios } from "./StockRatios";
+import { useShares } from "../../state/selectors/portfolio";
+import { Spinner } from "../core/Spinner";
 import { BuyStock } from "./BuyStock";
-import { Spinner } from "../base-ui/Spinner";
-import { useDispatch } from "react-redux";
-import { buyStock, sellStock } from "../../state/actions/portfolio";
+import { SearchBar } from "./SearchBar";
 import { SellStock } from "./SellStock";
-import { useStockInPortfolio } from "../../state/selectors/portfolio";
+import { StockChart } from "./StockChart";
+import { StockProfile } from "./StockProfile";
+import { StockRatios } from "./StockRatios";
 
 const Body = styled.div`
   display: flex;
@@ -32,7 +30,7 @@ const ContentFooter = styled.div`
   width: 100%;
 `;
 
-const SearchBar = styled(StockSearch)`
+const Search = styled(SearchBar)`
   margin-bottom: 50px;
 `;
 
@@ -44,71 +42,49 @@ const Content = styled.div`
 `;
 
 export const StockDetails = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [stockDetails, setStockDetails] = useState<any>();
+  const [stockData, setStockData] = useState<any>();
   const [chartPeriod, setChartPeriod] = useState<number>(5);
   const { ticker } = useParams();
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const stockInPortfolio = useStockInPortfolio(ticker);
+  const sharesHeld = useShares(ticker);
 
   useEffect(() => {
-    const baseUrl = "https://fmpcloud.io/api/v3";
-    const apiKey = `apikey=${process.env.REACT_APP_FMP_TOKEN}`;
+    const fetchData = async () => {
+      try {
+        const urls = [
+          `https://fmpcloud.io/api/v3/company/profile/${ticker}?apikey=${process.env.REACT_APP_FMP_TOKEN}`,
+          `https://fmpcloud.io/api/v3/quote/${ticker}?apikey=${process.env.REACT_APP_FMP_TOKEN}`,
+          `https://fmpcloud.io/api/v3//historical-price-full/${ticker}?timeseries=${chartPeriod}&apikey=${process.env.REACT_APP_FMP_TOKEN}`
+        ];
 
-    let fetchCompanyProfile = fetch(
-      `${baseUrl}/company/profile/${ticker}?${apiKey}`
-    );
-    let fetchRealTimeQuote = fetch(`${baseUrl}/quote/${ticker}?${apiKey}`);
-    let fetchChartData = fetch(
-      `${baseUrl}/historical-price-full/${ticker}?timeseries=${chartPeriod}&${apiKey}`
-    );
+        const results = await Promise.all(
+          urls.map(async url => {
+            let response = await fetch(url);
+            return response.json();
+          })
+        );
 
-    Promise.all([fetchCompanyProfile, fetchRealTimeQuote, fetchChartData])
-      .then(files => Promise.all(files.map(files => files.json())))
-      .then(data => {
-        setStockDetails({
-          companyProfile: data[0].profile,
-          realTimeQuote: data[1][0],
-          chartData: data[2].historical.reverse()
+        setStockData({
+          companyProfile: results[0].profile,
+          realTimeQuote: results[1][0],
+          chartData: results[2].historical.reverse()
         });
-        setIsLoading(false);
-      })
-      .catch(err => console.log(err));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
   }, [chartPeriod, ticker]);
 
-  if (isLoading) {
+  if (!stockData) {
     return <Spinner />;
   }
 
-  const onBuy = (amount: number) => {
-    dispatch(
-      buyStock({
-        symbol: ticker!,
-        price: companyProfile.price,
-        qtty: amount
-      })
-    );
-    history.push("/");
-  };
-
-  const onSell = (amount: number) => {
-    dispatch(
-      sellStock({
-        symbol: ticker!,
-        price: companyProfile.price,
-        qtty: amount
-      })
-    );
-    history.push("/");
-  };
-
-  const { companyProfile, realTimeQuote, chartData } = stockDetails;
+  const { companyProfile, realTimeQuote, chartData } = stockData;
 
   return (
     <Body>
       <Header>
-        <SearchBar size={300} />
+        <Search size={300} />
       </Header>
       <>
         <ContentHeader companyProfile={companyProfile} />
@@ -121,10 +97,10 @@ export const StockDetails = () => {
           <StockRatios realTimeQuote={realTimeQuote} />
         </Content>
         <ContentFooter>
-          {stockInPortfolio && (
-            <SellStock onClick={onSell} holdStock={stockInPortfolio?.qtty} />
+          {sharesHeld && (
+            <SellStock sharesHeld={sharesHeld} price={companyProfile.price} />
           )}
-          <BuyStock onClick={onBuy} price={companyProfile.price} />
+          <BuyStock price={companyProfile.price} symbol={ticker!} />
         </ContentFooter>
       </>
     </Body>

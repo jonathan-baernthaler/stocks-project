@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Sidebar } from "../components/sidebar/SideBar";
 import { Dashboard } from "../components/portfolio/Dashboard";
-import { StockSearch } from "../components/stocks/StockSearch";
+import { SearchBar } from "../components/stocks/SearchBar";
 import { StockDetails } from "../components/stocks/StockDetails";
 import styled from "styled-components";
 import { NotFound } from "./NotFound";
@@ -22,7 +22,7 @@ export const AppRouter = () => {
       <MainLayout>
         <Switch>
           <Route path="/" component={Dashboard} exact />
-          <Route path="/stocks" component={StockSearch} exact />
+          <Route path="/stocks" component={SearchBar} exact />
           <Route path="/stocks/:ticker" component={StockDetails} exact></Route>
           <Route path="/" component={NotFound} />
         </Switch>
