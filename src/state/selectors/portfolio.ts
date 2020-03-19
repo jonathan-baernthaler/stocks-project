@@ -10,3 +10,7 @@ export const useShares = (ticker: string | undefined) => {
 export const useCurrentBalance = () => {
   return useSelector((state: State) => state.currentBalance);
 };
+
+export const usePortfolio = () => {
+  return useSelector((state: State) => state.portfolio);
+};
