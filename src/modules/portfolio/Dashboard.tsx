@@ -30,7 +30,7 @@ const Search = styled.div`
   margin-bottom: 50px;
 `;
 
-type SharesInPortfolio = {
+type portfolioQuote = {
   symbol: string;
   name: string;
   price: number;
@@ -53,9 +53,7 @@ const getQtty = (symbol: string, portfolio: Stock[]) => {
 };
 
 export const Dashboard = () => {
-  const [sharesInPortfolio, setSharesInPortfolio] = useState<
-    SharesInPortfolio[]
-  >([]);
+  const [portfolioQuote, setPortfolioQuote] = useState<portfolioQuote[]>([]);
   const currentBalance = useCurrentBalance();
   const portfolio = usePortfolio();
 
@@ -67,7 +65,7 @@ export const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (!urls.length) {
-        return setSharesInPortfolio([]);
+        return setPortfolioQuote([]);
       }
       try {
         const results = await Promise.all(
@@ -76,7 +74,7 @@ export const Dashboard = () => {
             return (response.json() as unknown) as CompanyProfile;
           })
         );
-        setSharesInPortfolio(formatResults(results));
+        setPortfolioQuote(formatResults(results));
       } catch (error) {
         console.log(error);
       }
@@ -85,7 +83,7 @@ export const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const data = sharesInPortfolio.map((element, index: number) => ({
+  const data = portfolioQuote.map((element, index: number) => ({
     key: index,
     symbol: element.symbol,
     name: element.name,

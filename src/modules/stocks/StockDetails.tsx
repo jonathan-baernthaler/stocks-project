@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { useShares } from "../../state/selectors/portfolio";
+import { useSpecificShare } from "../../state/selectors/portfolio";
 import { Spinner } from "../core/Spinner";
 import { BuyStock } from "./components/BuyStock";
 import { SearchBar } from "./components/SearchBar";
@@ -37,7 +37,7 @@ export const StockDetails = () => {
   const [stockData, setStockData] = useState<any>();
   const [chartPeriod, setChartPeriod] = useState<number>(5);
   const { ticker } = useParams();
-  const sharesHeld = useShares(ticker);
+  const sharesHeld = useSpecificShare(ticker);
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { State } from "../reducers/portfolio";
 
-export const useShares = (ticker: string | undefined) => {
+export const useSpecificShare = (ticker: string | undefined) => {
   return useSelector(({ portfolio }: State) =>
     portfolio.filter(element => element.symbol === ticker)
   )[0];
