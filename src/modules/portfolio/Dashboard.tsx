@@ -7,7 +7,7 @@ import { CompanyProfile } from "../../api/schemas/profile";
 import { Stock } from "../../state/reducers/portfolio";
 import {
   useCurrentBalance,
-  usePortfolio
+  usePortfolio,
 } from "../../state/selectors/portfolio";
 import { SearchBar } from "../stocks/components/SearchBar";
 
@@ -43,12 +43,12 @@ const formatResults = (results: CompanyProfile[]) =>
       symbol,
       name,
       price,
-      changesPercentage
+      changesPercentage,
     })
   );
 
 const getQtty = (symbol: string, portfolio: Stock[]) => {
-  const stock = portfolio.find(element => element.symbol === symbol);
+  const stock = portfolio.find((element) => element.symbol === symbol);
   return stock!.qtty;
 };
 
@@ -58,7 +58,7 @@ export const Dashboard = () => {
   const portfolio = usePortfolio();
 
   const urls = portfolio.map(
-    entry =>
+    (entry) =>
       `https://fmpcloud.io/api/v3/company/profile/${entry.symbol}?apikey=${process.env.REACT_APP_FMP_TOKEN}`
   );
 
@@ -69,7 +69,7 @@ export const Dashboard = () => {
       }
       try {
         const results = await Promise.all(
-          urls.map(async url => {
+          urls.map(async (url) => {
             let response = await fetch(url);
             return (response.json() as unknown) as CompanyProfile;
           })
@@ -89,7 +89,7 @@ export const Dashboard = () => {
     name: element.name,
     qtty: getQtty(element.symbol, portfolio),
     price: element.price,
-    change: element.changesPercentage
+    change: element.changesPercentage,
   }));
 
   const portfolioValue = data.reduce(
@@ -102,23 +102,25 @@ export const Dashboard = () => {
       title: "Symbol",
       dataIndex: "symbol",
       key: "symbol",
-      render: (symbol: string) => <Link to={`/stocks/${symbol}`}>{symbol}</Link>
+      render: (symbol: string) => (
+        <Link to={`/stocks/${symbol}`}>{symbol}</Link>
+      ),
     },
     {
       title: "Name",
       dataIndex: "name",
-      key: "name"
+      key: "name",
     },
     {
       title: "Qtty",
       dataIndex: "qtty",
-      key: "qtty"
+      key: "qtty",
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      render: (price: number) => numeral(price).format("$0,0.00")
+      render: (price: number) => numeral(price).format("$0,0.00"),
     },
     {
       title: "Change",
@@ -128,8 +130,8 @@ export const Dashboard = () => {
         const num = (str.slice(1, -2) as unknown) as number;
         const color = num > 0 ? "green" : "red";
         return <span style={{ color }}>{`${num}%`}</span>;
-      }
-    }
+      },
+    },
   ];
 
   return (
@@ -153,7 +155,7 @@ export const Dashboard = () => {
           </Col>
         </Row>
       </Stats>
-      <Table dataSource={data} columns={columns} style={{ width: "100%" }} />;
+      <Table dataSource={data} columns={columns} style={{ width: "100%" }} />
     </Body>
   );
 };

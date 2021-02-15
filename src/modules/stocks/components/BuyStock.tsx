@@ -21,7 +21,9 @@ export const BuyStock: React.FC<Props> = ({ price, symbol }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const onChange = (value: number | undefined) => setQtty(value ?? 0);
+  const onChange = (value: string | number | undefined) =>
+    // @ts-ignore
+    setQtty((value as string) ?? 0);
 
   const onClick = () => {
     dispatch(buyStock({ symbol, price, qtty }));

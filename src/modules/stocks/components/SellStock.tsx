@@ -31,14 +31,16 @@ export const SellStock: React.FC<Props> = ({ sharesHeld, price }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const onChange = (value: number | undefined) => setQtty(value ?? 0);
+  const onChange = (value: string | number | undefined) =>
+    //@ts-ignore
+    setQtty(value ?? 0);
 
   const onClick = () => {
     dispatch(
       sellStock({
         symbol: sharesHeld.symbol,
         price,
-        qtty
+        qtty,
       })
     );
     history.push("/");
